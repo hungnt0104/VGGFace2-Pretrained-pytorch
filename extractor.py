@@ -62,8 +62,13 @@ class Extractor(object):
 
             assert output.shape[0] == len(img_files)
             for i, img_file in enumerate(img_files):
+                # print(img_file)
                 base_name = os.path.splitext(img_file)[0]
+                base_name = base_name.split('/')[3] + '/' + base_name.split('/')[4] + '/' + base_name.split('/')[5]
+                # print(base_name)
+                # print(self.feature_dir)
                 feature_file = os.path.join(self.feature_dir, base_name + ".npy")
+                # print(feature_file)
                 utils.create_dir(os.path.dirname(feature_file))
                 np.save(feature_file, output[i])
 
