@@ -38,8 +38,8 @@ class VGG_Faces2(data.Dataset):
         with open(self.image_list_file, 'r') as f:
             for i, img_file in enumerate(f):
                 img_file = img_file.strip()  # e.g. train/n004332/0317_01.jpg
-                class_id = img_file.split("/")[1]  # like n004332
-                label = "angry"
+                class_id = img_file.split("/")[4]  # like n004332
+                label = class_id
                 self.img_info.append({
                     'cid': class_id,
                     'img': img_file,
