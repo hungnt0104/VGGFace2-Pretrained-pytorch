@@ -46,7 +46,7 @@ def main():
                         help='text file containing image files used for training')
     parser.add_argument('--test_img_list_file', type=str, default='/path/to/test_image_list.txt',
                         help='text file containing image files used for validation, test or feature extraction')
-    parser.add_argument('--meta_file', type=str, default='/path/to/identity_meta.csv', help='meta file')
+    
     parser.add_argument('--checkpoint_dir', type=str, default='/path/to/checkpoint_directory',
                         help='checkpoints directory')
     parser.add_argument('--feature_dir', type=str, default='/path/to/feature_directory',
@@ -84,8 +84,8 @@ def main():
         torch.cuda.manual_seed(1337)
 
     # 0. id label map
-    meta_file = args.meta_file
-    id_label_dict = utils.get_id_label_map(meta_file)
+    # meta_file = args.meta_file
+    # id_label_dict = utils.get_id_label_map(meta_file)
 
     # 1. data loader
     root = args.dataset_dir
@@ -95,10 +95,10 @@ def main():
     kwargs = {'num_workers': args.workers, 'pin_memory': True} if cuda else {}
 
     if args.cmd == 'train':
-        dt = datasets.VGG_Faces2(root, train_img_list_file, id_label_dict, split='train')
+        dt = datasets.VGG_Faces2(root, train_img_list_file, split='train')
         train_loader = torch.utils.data.DataLoader(dt, batch_size=args.batch_size, shuffle=True, **kwargs)
 
-    dv = datasets.VGG_Faces2(root, test_img_list_file, id_label_dict, split='valid',
+    dv = datasets.VGG_Faces2(root, test_img_list_file, split='valid',
                              horizontal_flip=args.horizontal_flip)
     val_loader = torch.utils.data.DataLoader(dv, batch_size=args.batch_size, shuffle=False, **kwargs)
 
