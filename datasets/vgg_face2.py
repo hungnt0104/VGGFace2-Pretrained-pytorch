@@ -14,7 +14,7 @@ class VGG_Faces2(data.Dataset):
 
     mean_bgr = np.array([91.4953, 103.8827, 131.0912])  # from resnet50_ft.prototxt
 
-    def __init__(self, root, image_list_file, id_label_dict, split='train', transform=True,
+    def __init__(self, root, image_list_file, split='train', transform=True,
                  horizontal_flip=False, upper=None):
         """
         :param root: dataset directory
@@ -31,7 +31,7 @@ class VGG_Faces2(data.Dataset):
         self.image_list_file = image_list_file
         self.split = split
         self._transform = transform
-        self.id_label_dict = id_label_dict
+        # self.id_label_dict = id_label_dict
         self.horizontal_flip = horizontal_flip
 
         self.img_info = []
@@ -39,7 +39,7 @@ class VGG_Faces2(data.Dataset):
             for i, img_file in enumerate(f):
                 img_file = img_file.strip()  # e.g. train/n004332/0317_01.jpg
                 class_id = img_file.split("/")[1]  # like n004332
-                label = self.id_label_dict[class_id]
+                label = "angry"
                 self.img_info.append({
                     'cid': class_id,
                     'img': img_file,
@@ -67,6 +67,13 @@ class VGG_Faces2(data.Dataset):
             img = torchvision.transforms.functional.hflip(img)
 
         img = np.array(img, dtype=np.uint8)
+        # print(len(img.shape))
+        img_pil = PIL.Image.fromarray(img)
+
+        # Convert the grayscale image to RGB
+        img = img_pil.convert("RGB")
+        img = np.array(img, dtype=np.uint8)
+        # print(len(img.shape))
         assert len(img.shape) == 3  # assumes color images and no alpha channel
 
         label = info['lbl']
